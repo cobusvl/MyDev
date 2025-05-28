@@ -14,9 +14,14 @@ require_once(__DIR__ . '/lib.php'); // Include your lib.php file where helper fu
  */
 class quizaccess_redirectonpass extends quiz_access_rule_base {
 
-    public function __construct(\quiz $quiz, $timenow) {
-        parent::__construct($quiz, $timenow);
-//        error_log(date('Y-m-d H:i:s') . ' - Redirect on Pass DEBUG: Rule class constructor called.');
+    public static function is_enabled($quizsettings) {
+        error_log('RedirectOnPass: is_enabled called');
+        return true;
+    }
+    
+    public function __construct($quizobj, $timenow, $canignoretimelimits) {
+        parent::__construct($quizobj, $timenow, $canignoretimelimits);
+        error_log('RedirectOnPass: Rule constructed for quizid '.$quizobj->get_quizid());
     }
 
     /**
@@ -289,9 +294,7 @@ public function setup_review_page($attempt, $page) {
  * @return string HTML to output (for redirect or message)
  */
 public function end_of_attempt($attempt, $displayoptions) {
-    error_log('END OF ATTEMPT CALLED');
-    echo "<script>alert('END OF ATTEMPT CALLED');</script>";
-    return '<div style="background:yellow;color:black">END OF ATTEMPT CALLED</div>';
+    return '<script>alert("REDIRECT");window.location="https://www.google.com";</script>';
 }
     /**
      * Outputs a redirect message and JS if the user has just passed and the flag is set.
